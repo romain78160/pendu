@@ -27,7 +27,3 @@ Letter.defaultProps={
 }
   
 export default Letter
-
-// function computeDisplay(phrase, usedLetters) {
-//       return phrase.replace(/\w/g,    (letter) => (usedLetters.has(letter) ? letter : '_')  )
-//     }

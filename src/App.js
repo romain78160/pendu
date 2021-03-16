@@ -8,7 +8,8 @@ const alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p
 class App extends Component {
   state = {
     letters : this.generateLetters(),
-    currentWord: this.getWord(),
+    currentWord: this.getWord().toUpperCase(),
+    usedLetters : [],
     guesses: 0
   }
 
@@ -21,26 +22,46 @@ class App extends Component {
   }
 
   getWord(){
-    return "POUETTE";
+    return "Romain";
+  }
+
+  handleLetterClick = (index) =>{
+    let {letters, usedLetters, guesses} = this.state;
+
+    let currentLetter = letters[index];
+
+    //incrementation des essais
+    guesses++;
+
+    if(usedLetters.includes(currentLetter))
+    {
+      console.log("return false");
+      return false;
+    }
+    usedLetters.push(currentLetter);
+
+    console.log("handleClick continue");
+
+    this.setState({usedLetters: usedLetters, guesses: guesses});
+
   }
   
-
   render() {
     
-    const {letters, currentWord} = this.state;
+    const {letters, usedLetters, currentWord} = this.state;
+
+    // WordAreaaa = () => <WordArea value={currentWord} />;
 
     return(
 
       <div className="container">
 
-        {/* <div className="row justify-content-center wordSpace">
-          <div className="col-1">T</div>
-          <div className="col-1">O</div>
-          <div className="col-1">T</div>
-          <div className="col-1">O</div>
-        </div> */}
+        {/* ******BEFORE******  */} 
+        {/* <WordArea value={currentWord}  /> */}
+        <WordArea value={currentWord} usedLetters={usedLetters} />
+        {/* {/* ******BEFORE******  */}
 
-        <WordArea value={currentWord} />
+        {/* // {WordAreaaa} */}
 
         <div className="row w-50 mx-auto justify-content-center letterList">
           {
@@ -51,6 +72,7 @@ class App extends Component {
                 etat="notFounded"
                 index={index}
                 key={index}
+                onClick={this.handleLetterClick}
               />
 
             ))
