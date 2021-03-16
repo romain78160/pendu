@@ -2,18 +2,18 @@
 import PropTypes from 'prop-types'
 
 const Letter = ({ letter, etat, index, onClick }) => (
-    <div className={`col-1 letterDiv`} onClick={() => onClick(index)}>
-      <span className={`letterSpan ${etat}`}>
+    <div className={`col-1 letterDiv`} >
+      <button type="button" className={`btn btn-primary btn-sm`}  onClick={() => onClick(index)} disabled={etat}>
         {letter}
-      </span>
+      </button>
     </div>
 )
 
 Letter.propTypes = {
     letter: PropTypes.string.isRequired,
     etat: PropTypes.oneOf([
-      'founded',
-      'notFounded',
+      'disabled',
+      '',
     ]).isRequired,
     index: PropTypes.number.isRequired,
     onClick: PropTypes.func
@@ -21,9 +21,9 @@ Letter.propTypes = {
 
 Letter.defaultProps={
     letter:"&",
-    etat: "notFounded",
+    etat: '',
     index:0,
-    onClick:() => {console.log('coucou click')}
+    onClick:() => {console.log('click letter')}
 }
   
 export default Letter

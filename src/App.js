@@ -22,6 +22,7 @@ class App extends Component {
   }
 
   getWord(){
+    //TODO lire fichier words.txt
     return "Romain";
   }
 
@@ -33,43 +34,44 @@ class App extends Component {
     //incrementation des essais
     guesses++;
 
+    //ne pas reclicquer sur la mm lettre
     if(usedLetters.includes(currentLetter))
     {
-      console.log("return false");
       return false;
     }
     usedLetters.push(currentLetter);
 
-    console.log("handleClick continue");
-
     this.setState({usedLetters: usedLetters, guesses: guesses});
+  }
 
+  getStateBtn(index){
+    const {letters, usedLetters} = this.state;
+
+    if(usedLetters.includes(letters[index])){
+      return "disabled";
+    }
+    else{
+      return ""
+    }
   }
   
   render() {
     
     const {letters, usedLetters, currentWord} = this.state;
 
-    // WordAreaaa = () => <WordArea value={currentWord} />;
-
     return(
 
       <div className="container">
 
-        {/* ******BEFORE******  */} 
-        {/* <WordArea value={currentWord}  /> */}
         <WordArea value={currentWord} usedLetters={usedLetters} />
-        {/* {/* ******BEFORE******  */}
-
-        {/* // {WordAreaaa} */}
-
+ 
         <div className="row w-50 mx-auto justify-content-center letterList">
           {
             letters.map((letter, index) => (
 
               <Letter
                 letter={letter}
-                etat="notFounded"
+                etat={this.getStateBtn(index)}
                 index={index}
                 key={index}
                 onClick={this.handleLetterClick}
