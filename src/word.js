@@ -47,9 +47,7 @@ class WordArea extends Component {
         return true;
     }
     
-    render(){
-
-        console.log("REnder this.mask = ",this.mask);
+    render(){        
         return(
             <div className="row justify-content-center wordSpace display-1">
                 {

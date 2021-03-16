@@ -2,8 +2,11 @@ import React, { Component } from 'react'
 import './App.css';
 import Letter from './Letter';
 import WordArea from './word';
+// import dico from './dico.json'
 
-const alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+const ALPHABET = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+
+
 
 class App extends Component {
   state = {
@@ -15,13 +18,15 @@ class App extends Component {
 
   generateLetters() {
     const result = [];
-    alphabet.forEach(aLetter => {
+    ALPHABET.forEach(aLetter => {
       result.push(aLetter.toUpperCase())
     });
     return result;
   }
 
   getWord(){
+
+    // console.log("dico[0] = ",dico[0]);
     //TODO lire fichier words.txt
     return "Romain";
   }
