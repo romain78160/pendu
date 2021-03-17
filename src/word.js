@@ -2,6 +2,8 @@
 import PropTypes from 'prop-types'
 import { Component } from 'react'
 
+import {computeDisplay} from "./functions"
+
 
 class WordArea extends Component {
 
@@ -17,16 +19,12 @@ class WordArea extends Component {
 
     constructor(props){
         super(props);
-        this.mask = this.computeDisplay(props.value,props.usedLetters);
-    }
-
-    computeDisplay(phrase, _usedLetters) {
-      return phrase.replace(/\w/g,    (letter) => (_usedLetters.includes(letter) ? letter : '_')  ) 
+        this.mask = computeDisplay(props.value,props.usedLetters);
     }
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
 
-        let newMask = this.computeDisplay(this.props.value, nextProps.usedLetters);
+        let newMask = computeDisplay(this.props.value, nextProps.usedLetters);
 
         // console.log("this.mask = ",this.mask);
         // console.log("newMask = ",newMask);
@@ -47,7 +45,7 @@ class WordArea extends Component {
         return true;
     }
     
-    render(){        
+    render(){
         return(
             <div className="row justify-content-center wordSpace display-1">
                 {
