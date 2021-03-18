@@ -120,10 +120,12 @@ class App extends Component {
     const {usedLetters, currentWord} = this.state;
 
     let missingLetters = [...currentWord].filter(aLetter => !usedLetters.includes(aLetter));
-    let max = missingLetters.length;
+
+    let max = missingLetters.length-1;
     let min = 0;
     let randIdx = Math.floor(Math.random() * (max - min + 1)) + min;
     usedLetters.push(missingLetters[randIdx]);
+    
     this.setState({usedLetters: usedLetters});
   }
 
@@ -241,7 +243,7 @@ class App extends Component {
                     <i className="fas fa-hand-holding-medical"></i> Aide
                   </button>
                 )}
-                
+
                 <button type="button" className="btn btn-primary " onClick={this.onClickReplay}>
                   <i className="fas fa-sync-alt"></i> Replay
                 </button>
