@@ -51,12 +51,8 @@ class Parameter extends Component {
 
     onClickPlay = () =>{
 
-        console.log("")
-
         this.setState({currentWord: $("#aWord").val()},() =>{
             const {currentWord} = this.state;
-
-            console.log("param currentWord = ",currentWord);
 
             if(!currentWord.match(/^[A-Za-z]+$/)){
                 $.notify({
