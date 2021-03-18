@@ -9,17 +9,27 @@ class WordArea extends Component {
 
     static defaultProps={
         value:"WORD",
-        usedLetters : []
+        usedLetters : [],
+        onFinish : () => {console.log("FINISH")}
     }
 
     static propTypes = {
         value: PropTypes.string.isRequired,
         usedLetters: PropTypes.array.isRequired,
+        onFinish: PropTypes.func.isRequired,
     }
 
     constructor(props){
         super(props);
         this.mask = computeDisplay(props.value,props.usedLetters);
+        this.finished = false;
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        if (this.mask === this.props.value) {
+            this.finished = true;
+            this.props.onFinish();
+        }
     }
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
@@ -41,8 +51,8 @@ class WordArea extends Component {
         //     // console.log("AFTER  newMask = ",newMask);
         //     return true;
         // }
-
-        return true;
+        
+        return !this.finished;
     }
     
     render(){

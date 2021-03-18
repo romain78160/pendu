@@ -16,6 +16,7 @@ const DEFAULTMODE = MODELIST[0];
 function INITSTATE(){
   return {
     canPlay : false,
+    finished : false,
     mode : DEFAULTMODE.id,
     letters : generateLetters(),
     currentWord: getWord(DEFAULTMODE.id).toUpperCase(),
@@ -126,9 +127,13 @@ class App extends Component {
     this.setState({usedLetters: usedLetters});
   }
 
+  onFinishWord = () =>{
+    this.setState({finished : true});
+  }
+
   render() {
     
-    const {canPlay, mode, letters, usedLetters, currentWord} = this.state;
+    const {canPlay, mode, letters, usedLetters, currentWord, finished} = this.state;
 
     return(
 
@@ -147,7 +152,7 @@ class App extends Component {
                 <div className="input-group-prepend">
                   <label className="input-group-text" htmlFor="selectMode">Mode</label>
                 </div>
-                <select className="custom-select" id="selectMode" defaultValue={INITSTATE().mode}
+                <select className="custom-select" id="selectMode" defaultValue={mode}
                  onChange={this.onChangeMode} >
                    {
                      MODELIST.map((mode, index) => (                      
@@ -211,7 +216,7 @@ class App extends Component {
 
           <div className="playArea">
 
-            <WordArea value={currentWord} usedLetters={usedLetters} />
+            <WordArea value={currentWord} usedLetters={usedLetters} onFinish={this.onFinishWord} />
 
             <div className="row w-50 mx-auto justify-content-center letterList">
               {
@@ -231,10 +236,12 @@ class App extends Component {
 
             <div className="row justify-content-around">
 
-                <button type="button" className="btn btn-primary" onClick={this.onClickHelp}>
-                  <i className="fas fa-hand-holding-medical"></i> Aide
-                </button>
-
+                {(!finished) && (
+                  <button type="button" className="btn btn-primary" onClick={this.onClickHelp}>
+                    <i className="fas fa-hand-holding-medical"></i> Aide
+                  </button>
+                )}
+                
                 <button type="button" className="btn btn-primary " onClick={this.onClickReplay}>
                   <i className="fas fa-sync-alt"></i> Replay
                 </button>
