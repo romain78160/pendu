@@ -18,12 +18,11 @@ export const getWord = (mode) =>{
     let currentWord = "";
 
     if (mode === "DICO") {
-      let max = Dico.list.length;
+      let max = Dico.list.length-1;
       let min = 0;
       let randomIdx = Math.floor(Math.random() * (max - min + 1)) + min;
       currentWord = Dico.list[randomIdx];
     }
     
-    console.log("getWord currentWord = ",currentWord);
     return currentWord;
   }

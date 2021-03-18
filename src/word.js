@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types'
 import { Component } from 'react'
 
@@ -57,7 +56,7 @@ class WordArea extends Component {
     
     render(){
         return(
-            <div className="row justify-content-center wordSpace display-1 mx-auto">
+            <div className="row justify-content-center mb-5 display-1 mx-auto">
                 {
                     Array.from(this.mask).map((aChar, index) => (
                         <div key={index} className="mx-auto">{aChar}</div>
