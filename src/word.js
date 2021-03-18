@@ -37,7 +37,6 @@ class WordArea extends Component {
 
         // console.log("this.mask = ",this.mask);
         // console.log("newMask = ",newMask);
-
         //ne faire update si le mask ne change pas
         // if( this.mask === newMask){
         //     console.log("update = false ");
@@ -51,6 +50,7 @@ class WordArea extends Component {
         //     return true;
         // }
         
+        //bloque le multiple update du component
         return !this.finished;
     }
     

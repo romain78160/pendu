@@ -9,15 +9,9 @@ const DEFAULTMODE = MODELIST[0];
 
 
 class Parameter extends Component {
-    // static defaultProps={
-
-    // }
-
     static propTypes = {
         currentWord:        PropTypes.string.isRequired,
-        // onChangeMode:       PropTypes.func.isRequired,
-        onClickPlay:        PropTypes.func.isRequired,
-        // onClickReloadWord:  PropTypes.func.isRequired,        
+        onClickPlay:        PropTypes.func.isRequired,       
     }
 
     constructor(props){
@@ -51,10 +45,12 @@ class Parameter extends Component {
 
     onClickPlay = () =>{
 
-        this.setState({currentWord: $("#aWord").val()},() =>{
+        this.setState({currentWord: $("#aWord").val().trim()},() =>{
+            //callback setState
             const {currentWord} = this.state;
 
-            if(!currentWord.match(/^[A-Za-z]+$/)){
+            if(!currentWord.match(/^[a-zA-Z]+( [a-zA-Z]+)*$/)){
+                //TOD: revoir la lib
                 $.notify({
                     // options
                     icon: 'fas fa-exclamation',
@@ -63,7 +59,7 @@ class Parameter extends Component {
                 },{
                     // settings
                     type: "danger",
-                    allow_dismiss: true,//TODO : a tester autorise la croix de fermeture
+                    allow_dismiss: true,
                     newest_on_top: true,
                     placement: {
                     from: "top",//top, bottom

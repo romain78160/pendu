@@ -23,6 +23,6 @@ export const getWord = (mode) =>{
       let randomIdx = Math.floor(Math.random() * (max - min + 1)) + min;
       currentWord = Dico.list[randomIdx];
     }
-    
+
     return currentWord;
   }

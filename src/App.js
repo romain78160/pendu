@@ -9,15 +9,12 @@ import WordArea from './word';
 import Parameters from './parameters';
 import {generateLetters} from "./functions"
 
-
 function INITSTATE(){
   return {
     canPlay : false,
     finished : false,
-    // mode : DEFAULTMODE.id,
     letters : generateLetters(),
-    // currentWord: getWord(DEFAULTMODE.id).toUpperCase(),
-    currentWord: "",
+    currentWord: '',
     usedLetters : [],
     guesses: 0
   }
@@ -28,21 +25,21 @@ class App extends Component {
   state = INITSTATE();
 
   handleLetterClick = (index) =>{
-    let {letters, usedLetters, guesses} = this.state;
+    const {letters, usedLetters, guesses} = this.state;
 
     let currentLetter = letters[index];
 
     //incrementation des essais
-    guesses++;
+    const newGuesses = guesses+ 1;//nombre d'essai de pair
 
-    //ne pas reclicquer sur la mm lettre
+    //ne pas reclicker sur la mm lettre
     if(usedLetters.includes(currentLetter))
     {
       return false;
     }
-    usedLetters.push(currentLetter);
+    usedLetters.push(currentLetter);  
 
-    this.setState({usedLetters: usedLetters, guesses: guesses});
+    this.setState({usedLetters: usedLetters, guesses: newGuesses});
   }
 
   getStateBtn(index){
@@ -57,7 +54,8 @@ class App extends Component {
   }
 
   onClickPlay = (word) =>{
-    this.setState({currentWord: word ,canPlay : true});
+
+    this.setState({currentWord: word.toUpperCase(),canPlay : true});
   }
 
   onClickReplay = (event) => {

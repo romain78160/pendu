@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 const Letter = ({ letter, etat, index, onClick }) => (
     <div className={`col-1 letterDiv`} >
-      <button type="button" className={`btn btn-primary btn-sm`}  onClick={() => onClick(index)} disabled={etat}>
+      <button type="button" className={`btn btn-primary btn-sm`}  onClick={(event) => onClick(index)} disabled={etat}>
         {letter}
       </button>
     </div>
