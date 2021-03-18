@@ -8,7 +8,7 @@ import {computeDisplay} from "./functions"
 class WordArea extends Component {
 
     static defaultProps={
-        value:"TEST",
+        value:"WORD",
         usedLetters : []
     }
 
@@ -47,10 +47,10 @@ class WordArea extends Component {
     
     render(){
         return(
-            <div className="row justify-content-center wordSpace display-1">
+            <div className="row justify-content-center wordSpace display-1 mx-auto">
                 {
                     Array.from(this.mask).map((aChar, index) => (
-                        <div key={index} className="col-1">{aChar}</div>
+                        <div key={index} className="mx-auto">{aChar}</div>
                     ))
                 }
             </div>

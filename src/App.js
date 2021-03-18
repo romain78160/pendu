@@ -8,47 +8,25 @@ import Notify from 'bootstrap4-notify'
 import './App.css';
 import Letter from './Letter';
 import WordArea from './word';
-import Dico from './dico.json'
-import {computeDisplay} from "./functions"
+import {generateLetters, getWord} from "./functions"
 
-//TODO: chercher icon pour espace
-const ALPHABET = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
-const MODELIST = ["INPUT", "DICO"];
+const MODELIST = [{id :"INPUT", lib: "Manuel"},{id: "DICO", lib:"Automatique"}];
+const DEFAULTMODE = MODELIST[0];
 
-
-
-class App extends Component {
-  state = {
+function INITSTATE(){
+  return {
     canPlay : false,
-    mode : MODELIST[0],
-    letters : this.generateLetters(),
-    currentWord: this.getWord(MODELIST[0]).toUpperCase(),
+    mode : DEFAULTMODE.id,
+    letters : generateLetters(),
+    currentWord: getWord(DEFAULTMODE.id).toUpperCase(),
     usedLetters : [],
     guesses: 0
   }
+}
 
-  generateLetters() {
-    const result = [];
-    ALPHABET.forEach(aLetter => {
-      result.push(aLetter.toUpperCase())
-    });
-    return result;
-  }
 
-  getWord(mode){
-    // const {mode} = this.state;
-    let currentWord = "";
-
-    if (mode === "DICO") {
-      let max = Dico.list.length;
-      let min = 0;
-      let randomIdx = Math.floor(Math.random() * (max - min + 1)) + min;
-      currentWord = Dico.list[randomIdx];
-    }
-
-    console.log("currentWord = ",currentWord);
-    return currentWord;
-  }
+class App extends Component {
+  state = INITSTATE();
 
   handleLetterClick = (index) =>{
     let {letters, usedLetters, guesses} = this.state;
@@ -81,8 +59,6 @@ class App extends Component {
 
   onClickPlay = (e) =>{
 
-    console.log("onSubmitParam");
-
     if(!$("#aWord").val().match(/^[A-Za-z]+$/)){
       $.notify({
         // options
@@ -106,8 +82,9 @@ class App extends Component {
       });
     }
     else{
-      //TODO: setState CanPlay = true
-      this.setState({canPlay : true});
+      let currentWord = $("#aWord").val().toUpperCase();
+      console.log(currentWord);
+      this.setState({currentWord: currentWord ,canPlay : true});
     }
   }
   
@@ -115,19 +92,38 @@ class App extends Component {
     let choosedMode = event.target.value;
     let currentWord = '';
 
-    if (MODELIST.includes(choosedMode)) {
-      currentWord = this.getWord(choosedMode);
+    console.log("Change =",choosedMode);
+    
+    let idList = MODELIST.map(mode => mode.id);
+
+    if (idList.includes(choosedMode)) {
+      currentWord = getWord(choosedMode);
       
       this.setState({mode: choosedMode, currentWord: currentWord});
     }
   }
 
-  onClickReload = (event) =>{
+  onClickReloadWord = (event) =>{
 
     const {mode} = this.state;
-    let currentWord = this.getWord(mode);
+    let currentWord = getWord(mode);
 
     this.setState({currentWord: currentWord});
+  }
+
+  onClickReplay = (event) => {
+    this.setState(INITSTATE());
+  }
+
+  onClickHelp = (event) =>{
+    const {usedLetters, currentWord} = this.state;
+
+    let missingLetters = [...currentWord].filter(aLetter => !usedLetters.includes(aLetter));
+    let max = missingLetters.length;
+    let min = 0;
+    let randIdx = Math.floor(Math.random() * (max - min + 1)) + min;
+    usedLetters.push(missingLetters[randIdx]);
+    this.setState({usedLetters: usedLetters});
   }
 
   render() {
@@ -141,7 +137,6 @@ class App extends Component {
         {!canPlay ?(
 
           // parmètres du jeu
-
           <div className="card">
             <div className="card-header">
               Paramètres
@@ -152,9 +147,13 @@ class App extends Component {
                 <div className="input-group-prepend">
                   <label className="input-group-text" htmlFor="selectMode">Mode</label>
                 </div>
-                <select className="custom-select" id="selectMode" onChange={this.onChangeMode} >
-                  <option defaultValue value="INPUT">Saisie</option>
-                  <option value="DICO">Dico</option>
+                <select className="custom-select" id="selectMode" defaultValue={INITSTATE().mode}
+                 onChange={this.onChangeMode} >
+                   {
+                     MODELIST.map((mode, index) => (                      
+                      <option key={index} value={mode.id}>{mode.lib}</option>    
+                    ))
+                   }
                 </select>
               </div>
 
@@ -178,15 +177,14 @@ class App extends Component {
                 (
                   <div>
                     <div className="row">
-
-                    
-
                       <div className="form-group">
 
+                      <label htmlFor="aWord">Mot à trouvé: </label>
+
                         <div className="input-group mb-3">
-                          <input type="password" className="form-control" id="aWord" value={currentWord} readOnly/>
+                            <input type="password" className="form-control" id="aWord" value={currentWord} readOnly/>
                           <div className="input-group-append">
-                            <button type="button" className="btn btn-outline-primary" onClick={this.onClickReload}>
+                            <button type="button" className="btn btn-outline-primary" onClick={this.onClickReloadWord}>
                               <i className="fas fa-sync"></i>
                               </button>
                           </div>
@@ -201,12 +199,15 @@ class App extends Component {
                 )
               }
 
-              <button type="button" className="btn btn-primary" onClick={this.onClickPlay}>Play</button>
+              <button type="button" className="btn btn-primary " onClick={this.onClickPlay}>
+                <i className="fas fa-gamepad"></i> Play
+              </button>
 
             </div>
           </div>
 
         ):(
+          //canPlay == true
 
           <div className="playArea">
 
@@ -226,6 +227,18 @@ class App extends Component {
 
                 ))
               }
+            </div>
+
+            <div className="row justify-content-around">
+
+                <button type="button" className="btn btn-primary" onClick={this.onClickHelp}>
+                  <i className="fas fa-hand-holding-medical"></i> Aide
+                </button>
+
+                <button type="button" className="btn btn-primary " onClick={this.onClickReplay}>
+                  <i className="fas fa-sync-alt"></i> Replay
+                </button>
+
             </div>
           </div>
 
