@@ -135,8 +135,15 @@ class App extends Component {
             )}
             
 
-            <div className="row justify-content-center mb-5">
-              <div className="col-4 display-4 text-center">Score : {score}</div>
+            <div className="row justify-content-center mb-5 text-center">
+              <div className="col">
+                <blockquote className="blockquote display-4 text-center">
+                    Score : {score}
+                    {(!finished) && (
+                      <footer className="blockquote-footer">lettre trouvée = +2 , lettre non trouvée = -1 , aide = -3 </footer>
+                    )}                  
+                </blockquote>
+              </div>
             </div>
 
 
