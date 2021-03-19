@@ -9,6 +9,9 @@ import WordArea from './word';
 import Parameters from './parameters';
 import {generateLetters} from "./functions"
 
+const SUCCESSLIB  = "TROUVÉ !";
+const LOSELIB     = "PERDU !";
+
 function INITSTATE(){
   return {
     canPlay : false,
@@ -17,7 +20,9 @@ function INITSTATE(){
     currentWord: '',
     usedLetters : [],
     guesses: 0,
-    score:0
+    step: 0,// idx etape de l'image du pendu
+    score:0,
+    win :false
   }
 }
 
@@ -25,30 +30,38 @@ class App extends Component {
   state = INITSTATE();
 
   handleLetterClick = (index) =>{
-    const {letters, currentWord,  usedLetters, guesses, score} = this.state;
+    const {letters, currentWord,  usedLetters, guesses, score, step, finished, win} = this.state;
 
-    let currentLetter = letters[index];
-    let newScore = score;
+    let currentLetter = letters[index];  
 
-    //incrementation des essais
-    const newGuesses = guesses+ 1;//nombre d'essai
+    let stateObj = {
+      usedLetters: usedLetters, guesses: guesses+ 1, score: score,
+      step: step, finished: finished, win: win
+    }
 
     //ne pas reclicker sur la mm lettre
-    if(usedLetters.includes(currentLetter))
+    if(stateObj.usedLetters.includes(currentLetter))
     {
       // TODO: autoriser le reclick
-      newScore = newScore-2;//-2 si reclick sur une lettre deja tentée
+      stateObj.score = stateObj.score - 2;//-2 si reclick sur une lettre deja tentée
       return false;
     }
-    usedLetters.push(currentLetter);
+    stateObj.usedLetters.push(currentLetter);
 
     if ([...currentWord].includes(currentLetter)) {
-      newScore = newScore +2;//+2 en cas de lettre trouvée
+      stateObj.score = stateObj.score +2;//+2 en cas de lettre trouvée
     } else {
-      newScore--;//-1 en cas de lettre non trouvée
+      stateObj.score--;//-1 en cas de lettre non trouvée
+      stateObj.step++;
     }
 
-    this.setState({usedLetters: usedLetters, guesses: newGuesses, score: newScore});
+    if (stateObj.step === 11) {
+      stateObj.finished = true;
+      stateObj.win = false;
+      stateObj.usedLetters = [...currentWord];//affichage du mot qui était à trouvé
+    }
+
+    this.setState(stateObj);
   }
 
   getStateBtn(index){
@@ -87,12 +100,15 @@ class App extends Component {
   }
 
   onFinishWord = () =>{
-    this.setState({finished : true});
+
+    const {step} = this.state;
+    //evenement quand le mot a été trouvé
+    this.setState({finished : true, win: (step >=11?false:true)});
   }
 
   render() {
     
-    const {canPlay,letters, usedLetters, currentWord, finished, score} = this.state;
+    const {canPlay, letters, usedLetters, currentWord, finished, score, step, win} = this.state;
 
     return(
 
@@ -108,9 +124,25 @@ class App extends Component {
           //canPlay == true
 
           <div className="playArea">
+
+            <div className="text-center" style={{height : '190px'}}>              
+              { win ? (
+                    <img src={`/etapes/win.jpg`} className="h-100 rounded img-thumbnail" alt=""/>
+                  ):(
+                    <img src={`/etapes/${step}.jpg`} className="h-100 rounded img-thumbnail" alt=""/>
+                  )
+                }      
+            </div>
+
+
             {(finished) && (
               <div className="row">
-                <h1 className="col display-3 text-center">TROUVÉ !</h1>
+                { win ? (
+                    <h1 className="col display-3 text-center">{SUCCESSLIB}</h1>
+                  ):(
+                    <h1 className="col display-3 text-center">{LOSELIB}</h1>
+                  )
+                }                
               </div>
             )}
 
