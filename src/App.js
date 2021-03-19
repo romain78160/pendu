@@ -16,30 +16,39 @@ function INITSTATE(){
     letters : generateLetters(),
     currentWord: '',
     usedLetters : [],
-    guesses: 0
+    guesses: 0,
+    score:0
   }
 }
-
 
 class App extends Component {
   state = INITSTATE();
 
   handleLetterClick = (index) =>{
-    const {letters, usedLetters, guesses} = this.state;
+    const {letters, currentWord,  usedLetters, guesses, score} = this.state;
 
     let currentLetter = letters[index];
+    let newScore = score;
 
     //incrementation des essais
-    const newGuesses = guesses+ 1;//nombre d'essai de pair
+    const newGuesses = guesses+ 1;//nombre d'essai
 
     //ne pas reclicker sur la mm lettre
     if(usedLetters.includes(currentLetter))
     {
+      // TODO: autoriser le reclick
+      newScore = newScore-2;//-2 si reclick sur une lettre deja tentée
       return false;
     }
-    usedLetters.push(currentLetter);  
+    usedLetters.push(currentLetter);
 
-    this.setState({usedLetters: usedLetters, guesses: newGuesses});
+    if ([...currentWord].includes(currentLetter)) {
+      newScore = newScore +2;//+2 en cas de lettre trouvée
+    } else {
+      newScore--;//-1 en cas de lettre non trouvée
+    }
+
+    this.setState({usedLetters: usedLetters, guesses: newGuesses, score: newScore});
   }
 
   getStateBtn(index){
@@ -63,7 +72,7 @@ class App extends Component {
   }
 
   onClickHelp = (event) =>{
-    const {usedLetters, currentWord} = this.state;
+    const {usedLetters, currentWord, score} = this.state;
 
     let missingLetters = [...currentWord].filter(aLetter => !usedLetters.includes(aLetter));
 
@@ -72,7 +81,9 @@ class App extends Component {
     let randIdx = Math.floor(Math.random() * (max - min + 1)) + min;
     usedLetters.push(missingLetters[randIdx]);
 
-    this.setState({usedLetters: usedLetters});
+    const newScore = score - 3;//-3 si demande d'aide
+
+    this.setState({usedLetters: usedLetters, score: newScore});
   }
 
   onFinishWord = () =>{
@@ -81,7 +92,7 @@ class App extends Component {
 
   render() {
     
-    const {canPlay,letters, usedLetters, currentWord, finished} = this.state;
+    const {canPlay,letters, usedLetters, currentWord, finished, score} = this.state;
 
     return(
 
@@ -97,24 +108,37 @@ class App extends Component {
           //canPlay == true
 
           <div className="playArea">
+            {(finished) && (
+              <div className="row">
+                <h1 className="col display-3 text-center">TROUVÉ !</h1>
+              </div>
+            )}
 
             <WordArea value={currentWord} usedLetters={usedLetters} onFinish={this.onFinishWord} />
 
-            <div className="row w-50 mb-5 mx-auto justify-content-center letterList">
-              {
-                letters.map((letter, index) => (
+            {(!finished) && (
+                <div className="row w-50 mb-5 mx-auto justify-content-center letterList">
+                  {
+                    letters.map((letter, index) => (
+    
+                      <Letter
+                        letter={letter}
+                        etat={this.getStateBtn(index)}
+                        index={index}
+                        key={index}
+                        onClick={this.handleLetterClick}
+                      />
+    
+                    ))
+                  }
+                </div>
+            )}
+            
 
-                  <Letter
-                    letter={letter}
-                    etat={this.getStateBtn(index)}
-                    index={index}
-                    key={index}
-                    onClick={this.handleLetterClick}
-                  />
-
-                ))
-              }
+            <div className="row justify-content-center mb-5">
+              <div className="col-4 display-4 text-center">Score : {score}</div>
             </div>
+
 
             <div className="row justify-content-around ">
 

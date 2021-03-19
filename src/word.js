@@ -22,15 +22,8 @@ class WordArea extends Component {
         super(props);
         this.mask = computeDisplay(props.value,props.usedLetters);
         this.finished = false;
-    }
-
-    componentDidUpdate(prevProps, prevState){
-        if (this.mask === this.props.value) {
-            this.finished = true;
-            this.props.onFinish();
-        }
-    }
-
+    }    
+    
     shouldComponentUpdate(nextProps, nextState, nextContext) {
 
         let newMask = computeDisplay(this.props.value, nextProps.usedLetters);
@@ -52,6 +45,13 @@ class WordArea extends Component {
         
         //bloque le multiple update du component
         return !this.finished;
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        if (this.mask === this.props.value) {
+            this.finished = true;
+            this.props.onFinish();
+        }
     }
     
     render(){
