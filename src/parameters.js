@@ -78,6 +78,17 @@ class Parameter extends Component {
         });        
     }
 
+    checkWordFmrt = ({ target: { value } }) => {
+        value = value
+            //suppression de tous les digits // .replace(/\d+/g, '')
+            //conserve UNIQUEMENT les lettres
+            .replace(/[^a-zA-Z ]/g, '')
+            //suppression des multiples espaces
+            .replace( /\s\s+/g, ' ')
+            
+        this.setState({currentWord: value })
+    }
+
     render(){
 
         const {mode, currentWord} = this.state;
@@ -107,7 +118,10 @@ class Parameter extends Component {
                             <div className="row">
                                 <div className="form-group">
                                     <label htmlFor="aWord">Mot à trouvé: </label>
-                                    <input type="text" className="form-control" id="aWord"/>
+                                    <input type="text" className="form-control" id="aWord"
+                                        value={currentWord}
+                                        onChange={this.checkWordFmrt} required={true}
+                                    />
                                 </div>
                             </div>
                         )
@@ -119,7 +133,10 @@ class Parameter extends Component {
                                     <label htmlFor="aWord">Mot à trouvé: </label>
 
                                     <div className="input-group mb-3">
-                                        <input type="password" className="form-control" id="aWord" value={currentWord} readOnly/>
+                                        <input type="password" className="form-control" id="aWord" 
+                                            value={currentWord} 
+                                            onChange={this.checkWordFmrt} required={true}
+                                         readOnly/>
                                         <div className="input-group-append">
                                             <button type="button" className="btn btn-outline-primary" onClick={this.onClickReloadWord}>
                                                 <i className="fas fa-sync"></i>

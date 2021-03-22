@@ -77,7 +77,9 @@ class App extends Component {
 
   onClickPlay = (word) =>{
 
-    this.setState({currentWord: word.toUpperCase(),canPlay : true});
+    // console.log("APP this.paramField = ",this.paramField)
+    // this.setState({currentWord: word.toUpperCase(), canPlay : true});
+    this.setState({currentWord: this.paramField.state.currentWord.toUpperCase(), canPlay : true});
   }
 
   onClickReplay = (event) => {
@@ -118,7 +120,7 @@ class App extends Component {
 
           // parmètres du jeu
 
-          <Parameters currentWord={currentWord} onClickPlay={this.onClickPlay} />
+          <Parameters currentWord={currentWord} onClickPlay={this.onClickPlay} ref={(field) => { this.paramField = field }} />
 
         ):(
           //canPlay == true
@@ -133,8 +135,8 @@ class App extends Component {
                   )
                 }      
             </div>
-
-
+            
+            
             {(finished) && (
               <div className="row">
                 { win ? (
@@ -142,7 +144,7 @@ class App extends Component {
                   ):(
                     <h1 className="col display-3 text-center">{LOSELIB}</h1>
                   )
-                }                
+                }
               </div>
             )}
 
