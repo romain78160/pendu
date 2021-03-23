@@ -50,7 +50,7 @@ class Parameter extends Component {
             const {currentWord} = this.state;
 
             if(!currentWord.match(/^[a-zA-Z]+( [a-zA-Z]+)*$/)){
-                //TOD: revoir la lib
+                //TODO: revoir la lib
                 $.notify({
                     // options
                     icon: 'fas fa-exclamation',
