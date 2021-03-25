@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import { Component } from 'react'
-import { getWord } from "./functions"
+import { getWord } from "../utils/functions"
 import $ from "jquery";
-import Notify from 'bootstrap4-notify'
+// import Notify from 'bootstrap4-notify'
 
 const MODELIST = [{id :"INPUT", lib: "Manuel"},{id: "DICO", lib:"Automatique"}];
 const DEFAULTMODE = MODELIST[0];
@@ -51,26 +51,26 @@ class Parameter extends Component {
 
             if(!currentWord.match(/^[a-zA-Z]+( [a-zA-Z]+)*$/)){
                 //TODO: revoir la lib
-                $.notify({
-                    // options
-                    icon: 'fas fa-exclamation',
-                    title: 'Saisie du mot',
-                    message: 'Le mot ne doit pas contenir de caratère spéciaux ni de ponctuation',
-                },{
-                    // settings
-                    type: "danger",
-                    allow_dismiss: true,
-                    newest_on_top: true,
-                    placement: {
-                    from: "top",//top, bottom
-                    align: "center"//left, center, right
-                    },
-                    offset: 20,
-                    animate: {
-                    enter: 'animated fadeInDown',
-                    exit: 'animated fadeOutUp'
-                    }
-                });
+                // $.notify({
+                //     // options
+                //     icon: 'fas fa-exclamation',
+                //     title: 'Saisie du mot',
+                //     message: 'Le mot ne doit pas contenir de caratère spéciaux ni de ponctuation',
+                // },{
+                //     // settings
+                //     type: "danger",
+                //     allow_dismiss: true,
+                //     newest_on_top: true,
+                //     placement: {
+                //     from: "top",//top, bottom
+                //     align: "center"//left, center, right
+                //     },
+                //     offset: 20,
+                //     animate: {
+                //     enter: 'animated fadeInDown',
+                //     exit: 'animated fadeOutUp'
+                //     }
+                // });
             }
             else{
                 this.props.onClickPlay(currentWord);

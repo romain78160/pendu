@@ -3,11 +3,11 @@ import React, { Component } from 'react'
 // import { FontAwesomeIc on } from '@fortawesome/react-fontawesome'
 // import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 
-import './App.css';
+import '../css/App.css';
 import Letter from './Letter';
 import WordArea from './word';
 import Parameters from './parameters';
-import {generateLetters} from "./functions"
+import {generateLetters} from "../utils/functions"
 
 const SUCCESSLIB  = "TROUVÉ !";
 const LOSELIB     = "PERDU !";

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { Component } from 'react'
 
-import {computeDisplay} from "./functions"
+import {computeDisplay} from "../utils/functions"
 
 
 class WordArea extends Component {

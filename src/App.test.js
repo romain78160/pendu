@@ -4,8 +4,8 @@ import { shallow } from 'enzyme'
 import sinon from 'sinon'
 
 
-import App from './App'
-import Parameters from './parameters'
+import App from './components/App'
+import Parameters from './components/parameters'
 
 
 describe('<App />', () => {
