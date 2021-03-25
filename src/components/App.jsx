@@ -12,22 +12,20 @@ import {generateLetters} from "../utils/functions"
 const SUCCESSLIB  = "TROUVÉ !";
 const LOSELIB     = "PERDU !";
 
-function INITSTATE(){
-  return {
-    canPlay : false,
-    finished : false,
-    letters : generateLetters(),
-    currentWord: '',
-    usedLetters : [],
-    guesses: 0,
-    step: 0,// idx etape de l'image du pendu
-    score:0,
-    win :false
-  }
+const INITSTATE = {
+  canPlay : false,
+  finished : false,
+  letters : generateLetters(),
+  currentWord: '',
+  usedLetters : [],
+  guesses: 0,
+  step: 0,// idx etape de l'image du pendu
+  score:0,
+  win :false
 }
 
 class App extends Component {
-  state = INITSTATE();
+  state = {...INITSTATE};
 
   handleLetterClick = (index) =>{
     const {letters, currentWord,  usedLetters, guesses, score, step, finished, win} = this.state;
@@ -83,7 +81,7 @@ class App extends Component {
   }
 
   onClickReplay = (event) => {
-    this.setState(INITSTATE());
+    this.setState({...INITSTATE});
   }
 
   onClickHelp = (event) =>{
