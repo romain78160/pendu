@@ -10,6 +10,7 @@
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.3",
     "bootstrap": "^4.6.0",
+    "bootstrap-show-password": "^1.2.1",
     "bootstrap4-notify": "^4.0.3",
     "chai": "^4.3.4",
     "jquery": "^3.6.0",

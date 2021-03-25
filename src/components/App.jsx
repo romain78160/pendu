@@ -74,9 +74,6 @@ class App extends Component {
   }
 
   onClickPlay = (word) =>{
-
-    // console.log("APP this.paramField = ",this.paramField)
-    // this.setState({currentWord: word.toUpperCase(), canPlay : true});
     this.setState({currentWord: this.paramField.state.currentWord.toUpperCase(), canPlay : true});
   }
 
@@ -94,7 +91,7 @@ class App extends Component {
     let randIdx = Math.floor(Math.random() * (max - min + 1)) + min;
     usedLetters.push(missingLetters[randIdx]);
 
-    const newScore = score - 3;//-3 si demande d'aide
+    let newScore = score - 3;//-3 si demande d'aide
 
     this.setState({usedLetters: usedLetters, score: newScore});
   }

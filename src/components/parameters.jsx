@@ -1,16 +1,17 @@
 import PropTypes from 'prop-types'
 import { Component } from 'react'
 import { getWord } from "../utils/functions"
-import $ from "jquery";
-// import Notify from 'bootstrap4-notify'
+
+// password avec show/hide
+// import BootPwd from 'bootstrap-show-password'
 
 const MODELIST = [{id :"INPUT", lib: "Manuel"},{id: "DICO", lib:"Automatique"}];
-const DEFAULTMODE = MODELIST[0];
+const DEFAULTMODE = MODELIST[1];
 
 
 class Parameter extends Component {
     static propTypes = {
-        currentWord:        PropTypes.string.isRequired,
+        // currentWord:        PropTypes.string.isRequired,
         onClickPlay:        PropTypes.func.isRequired,       
     }
 
@@ -19,6 +20,7 @@ class Parameter extends Component {
         this.state={
             mode : DEFAULTMODE.id,
             currentWord: getWord(DEFAULTMODE.id).toUpperCase(),
+            showWord : false //
         }
     }
 
@@ -28,6 +30,7 @@ class Parameter extends Component {
         
         let idList = MODELIST.map(mode => mode.id);
 
+        //aucun changement si le mode n'est pas reconnu
         if (idList.includes(choosedMode)) {
             currentWord = getWord(choosedMode);
             
@@ -36,46 +39,19 @@ class Parameter extends Component {
     }
 
     onClickReloadWord = (event) =>{
-
         const {mode} = this.state;
         let currentWord = getWord(mode);
-    
+
         this.setState({currentWord: currentWord});
-      }
+    }
+
+    onTogglePwd = (event) =>{
+        this.setState({showWord: !this.state.showWord});
+    }
 
     onClickPlay = () =>{
-
-        this.setState({currentWord: $("#aWord").val().trim()},() =>{
-            //callback setState
-            const {currentWord} = this.state;
-
-            if(!currentWord.match(/^[a-zA-Z]+( [a-zA-Z]+)*$/)){
-                //TODO: revoir la lib
-                // $.notify({
-                //     // options
-                //     icon: 'fas fa-exclamation',
-                //     title: 'Saisie du mot',
-                //     message: 'Le mot ne doit pas contenir de caratère spéciaux ni de ponctuation',
-                // },{
-                //     // settings
-                //     type: "danger",
-                //     allow_dismiss: true,
-                //     newest_on_top: true,
-                //     placement: {
-                //     from: "top",//top, bottom
-                //     align: "center"//left, center, right
-                //     },
-                //     offset: 20,
-                //     animate: {
-                //     enter: 'animated fadeInDown',
-                //     exit: 'animated fadeOutUp'
-                //     }
-                // });
-            }
-            else{
-                this.props.onClickPlay(currentWord);
-            }
-        });        
+        const {currentWord} = this.state;
+        this.props.onClickPlay(currentWord.trim());
     }
 
     checkWordFmrt = ({ target: { value } }) => {
@@ -91,7 +67,7 @@ class Parameter extends Component {
 
     render(){
 
-        const {mode, currentWord} = this.state;
+        const {mode, currentWord, showWord} = this.state;
 
         return(
             <div className="card">
@@ -112,41 +88,37 @@ class Parameter extends Component {
                             }
                         </select>
                     </div>
-
-                    {mode === "INPUT"?
-                        (
-                            <div className="row">
-                                <div className="form-group">
-                                    <label htmlFor="aWord">Mot à trouvé: </label>
-                                    <input type="text" className="form-control" id="aWord"
-                                        value={currentWord}
-                                        onChange={this.checkWordFmrt} required={true}
-                                    />
+                    
+                    <div className="row">
+                        <div className="form-group">
+                            <label htmlFor="aWord">Mot à trouvé: </label>
+                            <div className="input-group mb-3">
+                                
+                                <input type={(showWord)?"text":"password"} className="form-control"
+                                     id="aWord" value={currentWord} 
+                                    onChange={this.checkWordFmrt} required={true}
+                                    readOnly={(mode === "DICO")}
+                                />
+                                
+                                <div className="input-group-append ml-1">
+                                    <button type="button" className="btn btn-outline-primary" 
+                                        title="Cacher/monter le mot"onClick={this.onTogglePwd}>
+                                        {(showWord)?
+                                            (<i className="fas fa-eye-slash"></i>)
+                                        :
+                                            (<i className="fas fa-eye"></i>)
+                                        }
+                                    </button>
+                                    
+                                    {mode !== "INPUT" && (
+                                        <button type="button" className="btn btn-outline-primary" onClick={this.onClickReloadWord}>
+                                            <i className="fas fa-sync"></i>
+                                        </button>
+                                    )}
                                 </div>
                             </div>
-                        )
-                        :
-                        (
-                            <div className="row">
-                                <div className="form-group">
-
-                                    <label htmlFor="aWord">Mot à trouvé: </label>
-
-                                    <div className="input-group mb-3">
-                                        <input type="password" className="form-control" id="aWord" 
-                                            value={currentWord} 
-                                            onChange={this.checkWordFmrt} required={true}
-                                         readOnly/>
-                                        <div className="input-group-append">
-                                            <button type="button" className="btn btn-outline-primary" onClick={this.onClickReloadWord}>
-                                                <i className="fas fa-sync"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )
-                    }
+                        </div>
+                    </div>
 
                     <button type="button" className="btn btn-primary " onClick={this.onClickPlay}>
                         <i className="fas fa-gamepad"></i> Play
