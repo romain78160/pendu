@@ -30,11 +30,17 @@ class App extends Component {
   handleLetterClick = (index) =>{
     const {letters, currentWord,  usedLetters, guesses, score, step, finished, win} = this.state;
 
+    //recup de la letre clické selon son index
     let currentLetter = letters[index];  
 
+    //init du nouvel état
     let stateObj = {
-      usedLetters: usedLetters, guesses: guesses+ 1, score: score,
-      step: step, finished: finished, win: win
+      usedLetters: usedLetters,
+      guesses: guesses + 1,
+      score: score,
+      step: step, //etape de l'erreur (index de l'image du pendu)
+      finished: finished,
+      win: win
     }
 
     //ne pas reclicker sur la mm lettre
@@ -44,32 +50,48 @@ class App extends Component {
       stateObj.score = stateObj.score - 2;//-2 si reclick sur une lettre deja tentée
       return false;
     }
+
+    //ajout de la nouvelle lettre dans l'etat
     stateObj.usedLetters.push(currentLetter);
 
+    //calcul du score selon la lettre
     if ([...currentWord].includes(currentLetter)) {
       stateObj.score = stateObj.score +2;//+2 en cas de lettre trouvée
     } else {
       stateObj.score--;//-1 en cas de lettre non trouvée
-      stateObj.step++;
+      stateObj.step++;//incrementation du nombre d'erreur
     }
 
+    // verification du nombre de click pour detection de fin de jeu
     if (stateObj.step === 11) {
       stateObj.finished = true;
       stateObj.win = false;
       stateObj.usedLetters = [...currentWord];//affichage du mot qui était à trouvé
     }
 
+    console.log("Replay state = ", {...INITSTATE})
+
     this.setState(stateObj);
   }
 
-  getStateBtn(index){
+  // getStateBtn(index){
+  //   const {letters, usedLetters} = this.state;
+
+  //   if(usedLetters.includes(letters[index])){
+  //     return "disabled";
+  //   }
+  //   else{
+  //     return ""
+  //   }
+  // }
+  getUsedBtn(index){
     const {letters, usedLetters} = this.state;
 
     if(usedLetters.includes(letters[index])){
-      return "disabled";
+      return true;
     }
     else{
-      return ""
+      return false
     }
   }
 
@@ -78,6 +100,7 @@ class App extends Component {
   }
 
   onClickReplay = (event) => {
+    console.log("Replay state = ", {...INITSTATE})
     this.setState({...INITSTATE});
   }
 
@@ -145,6 +168,7 @@ class App extends Component {
 
             <WordArea value={currentWord} usedLetters={usedLetters} onFinish={this.onFinishWord} />
 
+            {/* Liste des boutons */}
             {(!finished) && (
                 <div className="row w-50 mb-5 mx-auto justify-content-center letterList">
                   {
@@ -152,10 +176,11 @@ class App extends Component {
     
                       <Letter
                         letter={letter}
-                        etat={this.getStateBtn(index)}
+                        // etat={this.getStateBtn(index)}
                         index={index}
                         key={index}
                         onClick={this.handleLetterClick}
+                        used={this.getUsedBtn(index)}
                       />
     
                     ))
